@@ -3,9 +3,9 @@ spring-boot-react-aws is springboot application with think client built with rea
 
 # DEMO
 
-[<p align="center"><img src="src/resource/images/PeopleSearch.JPG" alt="" width="900"></a></p>](https://master.d193mnet9teo7w.amplifyapp.com/)
+[<p align="center"><img src="src/resource/images/PeopleSearch.JPG" alt="" width="900"></a></p>](http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/)
 <br/>
-<p align="center"><img src="src/resource/images/PeopleSearch.JPG" alt="" width="900"></a></p>
+<p align="center"><a href="http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/" ><img src="src/resource/images/PeopleSearch.JPG" alt="" width="900"></a></p>
 
 
 
