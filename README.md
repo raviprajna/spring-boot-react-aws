@@ -2,7 +2,8 @@
 spring-boot-react-aws is springboot application with think client built with react and material design hosted on AWS EB
 
 # DEMO
-<a href="http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/" > http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/ </a>
+
+<a href="http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/" > <img src="src/main/resources/images/PeopleSearch.JPG" alt="" /></a>
 
 
 
