@@ -79,4 +79,12 @@ public class PersonServiceImpl implements PersonService {
     public Set<Person> getPersonByCity(String city) {
         return null;
     }
+
+    @Override
+    public Boolean deleteAddressById(Long id) throws EntityNotFoundException {
+        Address address = addressRepo.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Could not find Address with id: " + id));
+        personRepo.deleteById(address.getId());
+        return true;
+    }
 }

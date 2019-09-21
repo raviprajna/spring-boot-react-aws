@@ -6,7 +6,7 @@ import ravi.labs.springbootreactaws.exceptionsHandler.ConstraintsViolationExcept
 import ravi.labs.springbootreactaws.exceptionsHandler.EntityNotFoundException;
 
 
-public interface PersonService extends PersonSearchService {
+public interface PersonService extends PersonSearchService, AddressService{
     Person addPerson(Person person) throws ConstraintsViolationException;
     Person updatePerson(Person person) throws ConstraintsViolationException, EntityNotFoundException;
     boolean deletePerson(Long id) throws EntityNotFoundException;

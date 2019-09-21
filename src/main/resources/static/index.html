@@ -3,11 +3,12 @@
 <head>
     <title>Simple React Hello World</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-mdl/1.11.0/extra/material.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style type="text/css">
 	  #fixedbutton {
 			position: fixed;
-			bottom: 80px;
+			bottom: 75px;
 			right: 30px;
 			z-index : 99
 		}
@@ -16,6 +17,12 @@
 		}
 		.address{
 		border-top : 2px solid grey
+		}
+		.mdl-textfield__input{
+		color : grey
+		}
+		.mdl-textfield {
+		margin-right : 15px
 		}
 	  </style>
 
@@ -27,19 +34,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-mdl/1.11.0/extra/material.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-mdl/1.11.0/ReactMDL.min.js"></script>
-    <script type="text/babel">
-    const hostURL = "http://localhost:8080"
-    // const hostURL = "http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com"
+</body>
+</html>
+
+<script type="text/babel">
+    // const hostURL = "http://localhost:8080"
+    const hostURL = "http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com"
 
         // Menu Component
 		class Menu extends React.Component {
+
 			render() {
 				return (
 					<div style={{position: 'relative'}}>
-						<ReactMDL.IconButton name="more_vert" id={"demo-menu-lower-right"+this.props.forItem} />
-						<ReactMDL.Menu target={"demo-menu-lower-right"+this.props.forItem} align="right">
-							<ReactMDL.MenuItem>Edit</ReactMDL.MenuItem>
-							<ReactMDL.MenuItem>Delete</ReactMDL.MenuItem>
+						<ReactMDL.IconButton name="more_vert" id={"demo-menu-lower-right"+this.props.type+this.props.code} />
+						<ReactMDL.Menu target={"demo-menu-lower-right"+this.props.type+this.props.code } align="right">
+							<ReactMDL.MenuItem onClick={ () => this.props.handleEdit( this.props.type, this.props.code )}>Edit</ReactMDL.MenuItem>
+							<ReactMDL.MenuItem onClick={ () => this.props.handleDelete( this.props.type, this.props.code )}>Delete</ReactMDL.MenuItem>
 						</ReactMDL.Menu>
 					</div>
 				);
@@ -58,24 +69,28 @@
                             label="Street Address"
                             floatingLabel
                             style={{width: '200px'}}
+                             value={this.props.data.streetName}
                         />
                         <ReactMDL.Textfield
                             onChange={() => {}}
                             label="City"
                             floatingLabel
                             style={{width: '200px'}}
+                             value={this.props.data.city}
                         />
                         <ReactMDL.Textfield
                             onChange={() => {}}
                             label="Pincode"
                             floatingLabel
                             style={{width: '200px'}}
+                             value={this.props.data.pinCode}
                         />
                         <ReactMDL.Textfield
                             onChange={() => {}}
                             label="Address Type"
                             floatingLabel
                             style={{width: '200px'}}
+                             value={this.props.data.addressType}
                         />
 					</div>
 					:
@@ -83,10 +98,10 @@
                       <ReactMDL.ListItemContent
                             subtitle={ <div> { this.props.data.streetName } <br/>  { this.props.data.city } </div>}>
                             { this.props.data.addressType }
-                      </ReactMDL.ListItemContent> :
+                      </ReactMDL.ListItemContent>
 
                         <ReactMDL.ListItemAction>
-                          <Menu forItem={"A"} />
+                          <Menu type="address" code={this.props.data.id} handleDelete={this.props.handleDelete} />
                         </ReactMDL.ListItemAction>
         			 </ReactMDL.ListItem>
 					}
@@ -96,39 +111,13 @@
 		}
 
 		class People extends React.Component {
-		  constructor(props) {
-			super(props);
-			this.handleShowSnackbar = this.handleShowSnackbar.bind(this);
-			this.handleTimeoutSnackbar = this.handleTimeoutSnackbar.bind(this);
-			this.handleClickActionSnackbar = this.handleClickActionSnackbar.bind(this);
-			this.state = {
-			                 isSnackbarActive: false
-                         };
-		  }
-
-		  handleShowSnackbar() {
-			this.setState({
-			...this.state,
-			  isSnackbarActive: true
-			 });
-		  }
-		  handleTimeoutSnackbar() {
-			this.setState({
-			...this.state,
-			isSnackbarActive: false });
-		  }
-		  handleClickActionSnackbar() {
-			this.setState({
-			...this.state
-			});
-		  }
 
 			render() {
                 const viewCss =
                 {
                     color: '#fff',
                     height: '60px',
-                    background: ' bottom right 15% no-repeat #9C27B0'
+                    background: ' bottom right 15% no-repeat rgb(68, 138, 255)'
                 }
                 const addCss =
                 {
@@ -138,27 +127,29 @@
 				return (
 				<div>
                      <ReactMDL.Snackbar
-                          active={this.state.isSnackbarActive}
-                          onClick={this.handleClickActionSnackbar}
-                          onTimeout={this.handleTimeoutSnackbar}>
-                          Saved Successfully
+                          active={this.props.snackbar.active}
+                          onTimeout={this.props.snackbar.handleTimeoutSnackbar} >
+
+                          {this.props.snackbar.message}
                     </ReactMDL.Snackbar>
                     <ReactMDL.Card shadow={0} style={{width: '90%', margin: 'auto'}}>
                         <ReactMDL.CardTitle
                             style={this.props.editable ? addCss : viewCss }>
                             { !this.props.editable ?
-                                <h5>{ this.props.person.fullName}</h5> :
+                                <h6>{ this.props.person.fullName}</h6> :
                                 <div>
                                     <ReactMDL.Textfield
                                         onChange={() => {}}
                                         label="FirstName"
                                         floatingLabel
                                         style={{width: '200px'}}
+                                        value={this.props.person.firstName}
                                     />
                                     <ReactMDL.Textfield
                                         onChange={() => {}}
                                         label="LastName"
                                         floatingLabel
+                                        value={this.props.person.lastName}
                                         style={{width: '200px'}}
                                     />
                                 </div>
@@ -166,18 +157,24 @@
                         </ReactMDL.CardTitle>
                         <ReactMDL.CardText>
                         { this.props.person.addresses && this.props.person.addresses.map( (data) => (
-                            <Address editable={this.props.editable} data={data} /> ) )}
+                            <Address editable={this.props.editable} data={data}
+                            handleDelete={this.props.handleDelete}
+                            handleEdit={this.props.handleEdit}
+                            /> ) )}
 
                         </ReactMDL.CardText>
                         <ReactMDL.CardActions border>
                             <ReactMDL.Button colored>Add New Address</ReactMDL.Button>
                             <ReactMDL.Button raised accent id="save"
-                            onClick={this.handleShowSnackbar}
+                            onClick={() => this.props.handleEdit("","")}
                             > Save All </ReactMDL.Button>
                         </ReactMDL.CardActions>
                         <ReactMDL.CardMenu style={{color: '#fff'}}>
-                            <Menu />
-                        </ReactMDL.CardMenu>`
+                            <Menu type="person" code={this.props.person.id}
+                            handleDelete={this.props.handleDelete}
+                            handleEdit={this.props.handleEdit}
+                            />
+                        </ReactMDL.CardMenu>
                     </ReactMDL.Card>
 				</div>
 				);
@@ -186,25 +183,108 @@
 
 		class Content extends React.Component {
 
-		constructor(props) {
-			super(props);
-			this.state = {
-                             data : []
-                         };
+            constructor(props) {
+                super(props);
+                this.state = {
+                 data : [],
+                 snackBar : {
+                    active : false,
+                    message : "",
+                    handleShowSnackbar : this.handleShowSnackbar.bind(this),
+			        handleTimeoutSnackbar : this.handleTimeoutSnackbar.bind(this)
+                 },
+                 edit : {
+                    id : "",
+                    type : ""
+                 }
+                };
+                this.handleDelete = this.handleDelete.bind(this);
+                this.handleEdit = this.handleEdit.bind(this);
+                this.fetchAll = this.fetchAll.bind(this);
+              }
+
+
+		  handleShowSnackbar() {
+		  console.log("Showing SB ");
+		  var snackBar = this.state.snackBar;
+		  snackBar.active = true;
+			this.setState({
+			...this.state,
+			  snackBar : snackBar
+			 });
 		  }
 
-          componentDidMount(){
+		  handleTimeoutSnackbar() {
+		  console.log("Hiding  SB ");
+		    var snackBar = this.state.snackBar;
+		    snackBar.active = false;
+			this.setState({
+			...this.state,
+			snackBar : snackBar });
+		  }
+
+            fetchAll(){
+
+
               fetch(hostURL+"/api/v1/persons") // Call the fetch function passing the url of the API as a parameter
                 .then((resp) => resp.json())
                 .then((data) => {
                     console.log("data"+data);
+                    var snackBar = {};
+                    snackBar.active = true;
+                    snackBar.message = " People fetch successful ";
                     this.setState({ ...this.state, data : data })
                 })
                 .catch((error) => {
                     console.log("error"+error);
+                    var snackBar = {};
+                    snackBar.active = true;
+                    snackBar.message = " People fetch failed ";
+                    this.setState({ ...this.state, snackBar : snackBar })
+
+                });
+
+            }
+
+
+          handleDelete(type, id){
+            console.log("Deleting ");
+              fetch(hostURL+"/api/v1/"+type+"/"+id, { method : 'delete' } )
+                .then((resp) => resp.json())
+                .then((resp) => {
+                    var data = this.state.data;
+                    // if(type= 'people')  remove people with ID
+                    var snackBar = {};
+                    snackBar.active = true;
+                    snackBar.message = type + " deleted successfully. ID : " + id;
+                    this.setState({ ...this.state, data : data, snackBar : snackBar })
+                    this.fetchAll();
+                })
+                .catch((error) => {
+                    console.log("error"+error);
+                    var snackBar = {};
+                    snackBar.active = true;
+                    snackBar.message = type + " deleted failed. ID : " + id ;
+                    this.setState({ ...this.state, snackBar : snackBar })
+
                 });
           }
 
+          handleEdit(type, id){
+            console.log(" Editing ");
+             var edit = {
+                    id : id,
+                    type : type
+                 };
+
+            this.setState({ ...this.state, edit : edit })
+
+          }
+
+
+          componentDidMount(){
+              this.fetchAll();
+          }
 
 			render() {
 				return (
@@ -212,7 +292,11 @@
 					<ReactMDL.Grid className="demo-grid-3">
                         { this.state.data.map( (person) => (
 						<ReactMDL.Cell col={4} tablet={6} phone={12}>
-							<People editable={false} person={person} />
+							<People editable={this.state.edit.id == person.id} person={person}
+							snackbar={this.state.snackBar}
+							handleDelete={this.handleDelete}
+							handleEdit={this.handleEdit}
+							/>
 						</ReactMDL.Cell>
 						) )}
 					</ReactMDL.Grid>
@@ -229,7 +313,7 @@
 		class Layout extends React.Component {
 			render() {
 				return (
-				<div style={{height: '89vh', position: 'relative'}}>
+				<div style={{height: '87vh', position: 'relative'}}>
 					<ReactMDL.Layout fixedHeader>
 						<ReactMDL.Header title={"People Search"} style={{ height : '75px'}} >
 							 <ReactMDL.Textfield
@@ -279,5 +363,3 @@
 			document.getElementById('root')
 		);
 	</script>
-</body>
-</html>
