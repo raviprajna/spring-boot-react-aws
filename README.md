@@ -22,3 +22,9 @@ http://spring-boot-react-aws-dev.ap-south-1.elasticbeanstalk.com/swagger-ui.html
 
 # Sample JSON
 Available under   resorce/json folder
+
+#deploy on AWS EB
+1. mvn clean install
+2. eb use spring-boot-react-aws-dev
+3. eb deploy
+4. eb open
